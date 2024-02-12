@@ -1,17 +1,20 @@
 package jp.co.kiramex.dbSample.model;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 
-public class DbConnectSample01 {
+public class Review05 {
 
     public static void main(String[] args) {
-        // 3. データベース接続と結果取得のための変数宣言
+     // 3. データベース接続と結果取得のための変数宣言
         Connection con = null;
-        Statement stmt = null;
+        PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
@@ -26,21 +29,34 @@ public class DbConnectSample01 {
                     );
 
             // 4. DBとやりとりする窓口(Statementオブジェクト)の作成
-            stmt = con.createStatement();
+            String sql = "SELECT * FROM person WHERE id = ?";
+            pstmt = con.prepareStatement(sql);
+            
+            System.out.print("検索キーワードを入力してください > ");
+            String str1 = keyIn();
+            
+            pstmt.setString(1,str1);
 
             // 5, 6. Select文の実行と結果を格納/代入
-            String sql = "SELECT * FROM person  ";
-            rs = stmt.executeQuery(sql);
+            //System.out.print("検索キーワードを入力してください > ");    // ← 追記
+            //int input = keyIn();
+
+            //pstmt.setString(1, input);
+            // pstmt.setInt(2, input);
+
+            rs = pstmt.executeQuery();
 
             // 7. 結果を表示する
             while( rs.next() ) {
                 // Name列の値を取得
-                String name = rs.getString("id");
+                String name = rs.getString("name");
+                int age = rs.getInt("age");
                 // Population列の値を取得　← 追記
                // int population = rs.getInt("Population");  // ← 追記
 
                 // 取得した値を表示
                 System.out.println(name);
+                System.out.println(age);
                // System.out.println(population);  // ← 追記
             }
 
@@ -60,9 +76,9 @@ public class DbConnectSample01 {
                     e.printStackTrace();
                 }
             }
-            if (stmt != null) {
+            if (pstmt != null) {
                 try {
-                    stmt.close();
+                    pstmt.close();
                 } catch (SQLException e) {
                     System.err.println("Statementを閉じるときにエラーが発生しました。");
                     e.printStackTrace();
@@ -77,6 +93,28 @@ public class DbConnectSample01 {
                 }
             }
         }
+    }
+
+
+    private static String keyIn() {
+        String line = null;
+        try {
+            BufferedReader key = new BufferedReader(new InputStreamReader(System.in));
+            line = key.readLine();
+        } catch (IOException e) {
+
+        }
+        return line;
+    }
+
+
+    private static int keyInNum() {
+        int result = 0;
+        try {
+            result = Integer.parseInt(keyIn());
+        } catch (NumberFormatException e) {
+        }
+        return result;
     }
 
 }

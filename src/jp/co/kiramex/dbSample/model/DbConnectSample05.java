@@ -24,13 +24,13 @@ public class DbConnectSample05 {
 
             // 2. DBと接続する
             con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost/world?useSSL=false&allowPublicKeyRetrieval=true",
+                    "jdbc:mysql://localhost/kadaidb?useSSL=false&allowPublicKeyRetrieval=true",
                     "root",
                     "kurosiro.4649");
 
             // 4. DBとやりとりする窓口(PreparedStatementオブジェクト)の作成
             // 検索用SQLおよび検索用PreparedStatementオブジェクトを取得
-            String selectSql = "SELECT * FROM city where CountryCode = ?";
+            String selectSql = "SELECT * FROM person WHERE id = ?";
             spstmt = con.prepareStatement(selectSql);
             
             // 更新するCountryCodeを入力

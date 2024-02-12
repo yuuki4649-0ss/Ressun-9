@@ -23,7 +23,7 @@ public class DbConnectSample03 {
 
             // 2. DBと接続する
             con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost/world?useSSL=false&allowPublicKeyRetrieval=true",
+                    "jdbc:mysql://localhost/kadaidb?useSSL=false&allowPublicKeyRetrieval=true",
                     "root",
                     "kurosiro.4649");
 
@@ -34,19 +34,21 @@ public class DbConnectSample03 {
             System.out.print("検索キーワードを入力してください > ");    // ← 追記
             String input = keyIn();     // ← 追記
             
-            String sql = "select * from country where Name = '" + input + "'";      // ← 修正
+            String sql = "select * from person";      // ← 修正
             rs = stmt.executeQuery(sql);
 
             // 7. 結果を表示する
             while(rs.next()) {
                 // Name列の値を取得
                 String name = rs.getString("Name");
+                int age = rs.getInt("age");
                 // Population列の値を取得　← 追記
-                int population = rs.getInt("Population");
+           //     int population = rs.getInt("Population");
 
                 // 取得した値を表示
                 System.out.println(name);
-                System.out.println(population);
+                System.out.println(age);
+          //      System.out.println(population);
             }
         } catch (ClassNotFoundException e) {
             System.err.println("JDBCドライバのロードに失敗しました。");
